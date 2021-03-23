@@ -1,7 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
-import ig2i.la2.hackathon.ladydiary.domain.record.Record;
 import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import ig2i.la2.hackathon.ladydiary.services.UserService;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/topics")
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -27,7 +26,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Re records")})
     @GetMapping()
     public ResponseEntity<List<User>> getUsers(){
-        List<User> users = UserService.getAll();
+        List<User> users = userService.getAll();
 
         if (users.isEmpty()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -38,14 +37,14 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity createUser(@RequestBody User user) throws WrongFormatException {
+    public ResponseEntity<HttpStatus> createUser(@RequestBody User user) throws WrongFormatException {
         userService.CreateUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/{idUser}")
-    public ResponseEntity deleteUser(@RequestBody Integer idUser) throws RecordNotFoundException {
+    @DeleteMapping("/{idUser}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer idUser) throws RecordNotFoundException {
         userService.DeleteUser(idUser);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
