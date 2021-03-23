@@ -22,7 +22,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.decathlon.twist.packing.controllers"))
+                .apis(RequestHandlerSelectors.basePackage("ig2i.la2.hackathon.ladydiary.controllers"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
@@ -31,11 +31,11 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Twist Packing APIs",
+                "Lady Diary APIs",
                 "Description",
                 "v1",
                 "urn:tos",
-                new Contact("TWIST", null, "twist_feature@decathlon.net"),
+                new Contact("Lady Diart", null, "fdourlensmonchy@gmail.com"),
                 "Apache 2.0",
                 "http://www.apache.org/licenses/LICENSE-2.0",
                 Collections.emptyList());
