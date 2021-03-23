@@ -27,4 +27,7 @@ public class DataRecord {
 
     @Column(name = "value")
     private String value;
+
+    @Column(name = "id_record")
+    private Integer idRecord;
 }
