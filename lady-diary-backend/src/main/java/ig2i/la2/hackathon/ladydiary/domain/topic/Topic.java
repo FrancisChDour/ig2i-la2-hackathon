@@ -1,5 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.domain.topic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ig2i.la2.hackathon.ladydiary.domain.record.Record;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class Topic {
     private Integer id;
 
     @Column(name = "creation_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Column(name = "name")
