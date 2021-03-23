@@ -1,8 +1,9 @@
-package ig2i.la2.hackathon.ladydiary.configuration;
+package ig2i.la2.hackathon.ladydiary.controllers;
 
 import ig2i.la2.hackathon.ladydiary.domain.erros.DomainException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.ErrorMessage;
 import ig2i.la2.hackathon.ladydiary.domain.erros.NotFoundException;
+import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorMessage> handleNotFoundException(NotFoundException e) {
         log.info("NotFoundException thrown : " + e.getErrorMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(e.getErrorMessage());
+    }
+
+    @ExceptionHandler(WrongFormatException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorMessage> handleNotWrongFormatException(WrongFormatException e) {
+        log.info("NotFoundException thrown : " + e.getErrorMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(e.getErrorMessage());
     }
 }
