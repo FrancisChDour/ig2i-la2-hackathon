@@ -19,7 +19,7 @@ public class TopicController {
     private final TopicService topicService;
 
     @PostMapping()
-    public ResponseEntity createTopic(@RequestBody Topic topic) throws WrongFormatException {
+    public ResponseEntity<HttpStatus> createTopic(@RequestBody Topic topic) throws WrongFormatException {
         topicService.createTopic(topic);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

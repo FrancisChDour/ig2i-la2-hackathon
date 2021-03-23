@@ -20,10 +20,7 @@ public class Record {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    @Column(name = "key")
-    private String key;
-
-    @Column(name = "value")
-    private String value;
+    @Column(name = "record_date")
+    private LocalDateTime recordDate;
 
 }
