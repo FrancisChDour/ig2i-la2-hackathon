@@ -1,5 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.domain.record;
 
+import ig2i.la2.hackathon.ladydiary.domain.datarecord.DataRecord;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,5 +29,11 @@ public class Record {
 
     @Column(name = "record_date")
     private LocalDateTime recordDate;
+
+    @Column(name = "id_topic")
+    private Integer idTopic;
+
+    @OneToMany(mappedBy = "idRecord")
+    private List<DataRecord> dataRecords;
 
 }

@@ -1,5 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.domain.topic;
 
+import ig2i.la2.hackathon.ladydiary.domain.record.Record;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -30,4 +32,7 @@ public class Topic {
     @ManyToOne
     @JoinColumn(name = "id_owner")
     private User user;
+
+    @OneToMany(mappedBy = "idTopic")
+    List<Record> records;
 }

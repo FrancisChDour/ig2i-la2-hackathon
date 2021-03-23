@@ -49,6 +49,18 @@ public class TopicController {
         }
     }
 
+    @GetMapping("/fetchFromUser")
+    public ResponseEntity<List<Topic>> getTopicsFromUser(@RequestHeader String token) throws UnauthorizedException {
+        List<Topic> topics = topicService.getAllFromToken(token);
+
+        if (topics.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(topics);
+        }
+    }
+
     @GetMapping("/{idTopic}")
     public ResponseEntity<Topic> findTopicById(@PathVariable Integer idTopic) throws TopicNotFoundException {
         Topic topic = topicService.findTopicById(idTopic);
