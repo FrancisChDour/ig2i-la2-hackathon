@@ -82,9 +82,9 @@ ENGINE = InnoDB;
 
 -- INSERTS
 INSERT INTO `hackathon`.`user`
-	(`name`)
+	(`name`,`password`)
 VALUES
-('jacky'),('virgile'),('moi');
+('jacky','toto'),('virgile','titi'),('moi','salut');
 
 INSERT INTO `hackathon`.`topic`
 	(`creation_date`,`name`,`id_owner`)
