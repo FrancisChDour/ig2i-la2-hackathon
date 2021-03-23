@@ -1,0 +1,18 @@
+<mat-card class="login-card">
+  <h1>Login</h1>
+  <form #loginForm="ngForm">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" [(ngModel)]="email" class="form-control" id="exampleInputEmail1" name="emailId" aria-describedby="emailHelp"
+             placeholder="Enter email" required>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" [(ngModel)]="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+             required>
+    </div>
+
+    <button (click)="login()" type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">Login</button>
+  </form>
+  <br>
+</mat-card>
