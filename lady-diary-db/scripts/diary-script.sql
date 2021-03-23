@@ -21,6 +21,8 @@ USE `hackathon` ;
 CREATE TABLE IF NOT EXISTS `hackathon`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(255) NULL,
+  `token` CHAR(37) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
