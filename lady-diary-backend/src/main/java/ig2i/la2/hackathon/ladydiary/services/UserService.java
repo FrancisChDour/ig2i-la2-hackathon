@@ -27,11 +27,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void CreateUser(User user){
+    public void createUser(User user){
         userRepository.save(user);
     }
 
-    public void DeleteUser(Integer id) throws RecordNotFoundException {
+    public void deleteUser(Integer id) throws RecordNotFoundException {
         Optional<User> user = userRepository.findUserById(id);
         if(user.isEmpty()){
             throw new RecordNotFoundException();

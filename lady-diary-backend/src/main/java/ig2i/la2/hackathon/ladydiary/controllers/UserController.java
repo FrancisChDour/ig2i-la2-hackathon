@@ -38,13 +38,13 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> createUser(@RequestBody User user) throws WrongFormatException {
-        userService.CreateUser(user);
+        userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{idUser}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer idUser) throws RecordNotFoundException {
-        userService.DeleteUser(idUser);
+        userService.deleteUser(idUser);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
