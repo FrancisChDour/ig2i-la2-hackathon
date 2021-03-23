@@ -47,4 +47,16 @@ public class UserController {
         userService.DeleteUser(idUser);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws WrongFormatException {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userService.login(name, password).getToken());
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(@RequestHeader String token) throws WrongFormatException {
+        userService.logout(token);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
