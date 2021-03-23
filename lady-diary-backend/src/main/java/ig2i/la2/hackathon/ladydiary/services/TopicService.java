@@ -59,5 +59,9 @@ public class TopicService {
     }
 
 
+    public List<Topic> getAllFromToken(String token) throws UnauthorizedException {
+        User user = userService.authenticate(token);
 
+        return topicRepository.findTopicsByUser(user);
+    }
 }
