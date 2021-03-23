@@ -1,15 +1,17 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
+import ig2i.la2.hackathon.ladydiary.domain.erros.NotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
+import ig2i.la2.hackathon.ladydiary.domain.record.Record;
 import ig2i.la2.hackathon.ladydiary.domain.topic.Topic;
+import ig2i.la2.hackathon.ladydiary.domain.topic.TopicNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/topics")
@@ -23,5 +25,43 @@ public class TopicController {
         topicService.createTopic(topic);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PutMapping()
+    public ResponseEntity<HttpStatus> updateTopic(@RequestBody Topic topic) throws TopicNotFoundException {
+        topicService.updateTopic(topic);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{idTopic}")
+    public ResponseEntity<HttpStatus> deleteTopic(@PathVariable Integer idTopic) throws TopicNotFoundException {
+        topicService.deleteTopic(idTopic);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Topic>> getTopics() {
+        List<Topic> topics = topicService.getAll();
+
+        if (topics.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(topics);
+        }
+    }
+
+    @GetMapping("/{idTopic}")
+    public ResponseEntity<Topic> findTopicById(@PathVariable Integer idTopic) throws TopicNotFoundException {
+        Topic topic = topicService.findTopicById(idTopic);
+
+        if (topic == null){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(topic);
+        }
+    }
+
+
 
 }
