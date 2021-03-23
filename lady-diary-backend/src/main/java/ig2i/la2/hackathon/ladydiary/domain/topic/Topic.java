@@ -1,5 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.domain.topic;
 
+import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +26,8 @@ public class Topic {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "id_owner")
+    private User user;
 }

@@ -1,8 +1,7 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
-import ig2i.la2.hackathon.ladydiary.domain.erros.NotFoundException;
+import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
-import ig2i.la2.hackathon.ladydiary.domain.record.Record;
 import ig2i.la2.hackathon.ladydiary.domain.topic.Topic;
 import ig2i.la2.hackathon.ladydiary.domain.topic.TopicNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.TopicService;
@@ -21,8 +20,8 @@ public class TopicController {
     private final TopicService topicService;
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> createTopic(@RequestBody Topic topic) throws WrongFormatException {
-        topicService.createTopic(topic);
+    public ResponseEntity<HttpStatus> createTopic(@RequestBody Topic topic, @RequestHeader String token) throws WrongFormatException, UnauthorizedException {
+        topicService.createTopic(topic, token);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
