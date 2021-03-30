@@ -76,6 +76,7 @@ public class UserService {
                 .orElseThrow(WrongFormatException::new);
 
         user.setToken(null);
+        user.setTokenExpirationDate(null);
 
         userRepository.save(user);
     }
