@@ -1,8 +1,8 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
-import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import ig2i.la2.hackathon.ladydiary.domain.record.Record;
 import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
+import ig2i.la2.hackathon.ladydiary.domain.topic.TopicNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.RecordService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -38,7 +38,7 @@ public class RecordController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> createRecord(@RequestBody Record record) throws WrongFormatException {
+    public ResponseEntity<HttpStatus> createRecord(@RequestBody Record record) {
         recordService.createRecord(record);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -59,6 +59,23 @@ public class RecordController {
     public ResponseEntity<Record> getRecordById(@PathVariable int idRecord) throws RecordNotFoundException{
         Record record = recordService.findRecordById(idRecord);
         return ResponseEntity.status(HttpStatus.OK).body(record);
+    }
+
+
+    @ApiOperation(value = "Retrieve all records from a topic")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "No records found"),
+            @ApiResponse(code = 200, message = "Records")})
+    @GetMapping("/fetchFromTopic/{idTopic}")
+    public ResponseEntity<List<Record>> getRecordsFromIdTopic(@PathVariable int idTopic) throws TopicNotFoundException {
+        List<Record> records = recordService.getRecordsFromTopic(idTopic);
+
+        if (records.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(records);
+        }
     }
 }
 
