@@ -35,6 +35,11 @@ Test : `curl -X GET localhost:8080/ping`
 Je conseille de lancer l'application avec sa base H2 en mémoire via le profile h2 pour le moment.
 Néanmoins, le microservice peut se lancer avec un SGBD mariadb hébergé sur *localhost:5000/hackathon*
 
+## Swagger
+
+Le swagger constitue une grande partie de la documentation du projet. Il est accessible ici après lancement :
+http://localhost:8080/swagger-ui/
+
 ## Architecture
 
 ### Frameworks
