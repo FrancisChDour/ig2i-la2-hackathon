@@ -7,6 +7,19 @@ Ce microservice correspond au backend de l'application Lady Diary qui a été d�
 Ce micro service est Dockerisé. Les images des différentes versions sont disponibles ici :
 https://hub.docker.com/r/francischdour/ig2i-lady-diary-backend
 
+## Version
+v1.1.0
++ Gestion des doublons d'utilisateur
++ Gestion des mots de passe
++ Nouvelles API d'authentification
++ Nouvelle API GET records from Topic
+
+v1.0.1
++ gestion des erreur CORS (Angular)
+
+v1.0.0
++ Version initiale
+
 ## Installation
 
 L'open-jdk 15 et Apache Maven 3.6.3 sont nécessaires pour garantir le bon fonctionnement du microservice.
