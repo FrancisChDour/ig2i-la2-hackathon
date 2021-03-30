@@ -4,6 +4,7 @@ import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
+import ig2i.la2.hackathon.ladydiary.domain.user.UserNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -49,8 +50,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
+    @ApiOperation(value = "Login an user and return a token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "user doest not exit"),
+            @ApiResponse(code = 401, message = "User exits but password is incorrect")})
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException {
+    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException, UserNotFoundException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.login(name, password).getToken());
     }

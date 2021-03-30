@@ -5,6 +5,7 @@ import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import ig2i.la2.hackathon.ladydiary.domain.user.UserAlreadyExistsException;
+import ig2i.la2.hackathon.ladydiary.domain.user.UserNotFoundException;
 import ig2i.la2.hackathon.ladydiary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,11 +55,11 @@ public class UserService {
         return user;
     }
 
-    public User login(String name, String password) throws UnauthorizedException {
+    public User login(String name, String password) throws UnauthorizedException, UserNotFoundException {
         User user = userRepository.findUserByName(name)
-                .orElseThrow(UnauthorizedException::new);
+                .orElseThrow(UserNotFoundException::new);
 
-        if (user.getPassword().equals(password)){
+        if (!user.getPassword().equals(password)){
             throw new UnauthorizedException();
         }
 
