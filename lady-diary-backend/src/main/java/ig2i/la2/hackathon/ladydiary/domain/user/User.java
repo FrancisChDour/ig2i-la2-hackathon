@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -30,5 +31,8 @@ public class User {
 
     @Column(name = "token")
     private String token;
+
+    @Column(name = "token_expiration_date")
+    private LocalDateTime tokenExpirationDate;
 }
 

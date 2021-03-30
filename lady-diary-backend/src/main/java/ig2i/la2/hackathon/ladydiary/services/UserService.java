@@ -8,6 +8,7 @@ import ig2i.la2.hackathon.ladydiary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,19 +38,28 @@ public class UserService {
             throw new RecordNotFoundException();
         }
         userRepository.delete(user.get());
-
     }
 
     public User authenticate(String token) throws UnauthorizedException {
-        return userRepository.findUserByToken(token)
+        User user = userRepository.findUserByToken(token)
                 .orElseThrow(UnauthorizedException::new);
+
+        if (user.getTokenExpirationDate().isBefore(LocalDateTime.now())){
+            throw new UnauthorizedException();
+        }
+        return user;
     }
 
-    public User login(String name, String password) throws WrongFormatException {
+    public User login(String name, String password) throws UnauthorizedException {
         User user = userRepository.findUserByName(name)
-                .orElseThrow(WrongFormatException::new);
+                .orElseThrow(UnauthorizedException::new);
+
+        if (user.getPassword().equals(password)){
+            throw new UnauthorizedException();
+        }
 
         user.setToken(UUID.randomUUID().toString());
+        user.setTokenExpirationDate(LocalDateTime.now().plusHours(2));
 
         userRepository.save(user);
 
