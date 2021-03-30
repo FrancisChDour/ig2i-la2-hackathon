@@ -1,5 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
+import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws WrongFormatException {
+    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.login(name, password).getToken());
     }

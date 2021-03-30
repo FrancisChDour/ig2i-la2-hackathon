@@ -4,6 +4,7 @@ import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
+import ig2i.la2.hackathon.ladydiary.domain.user.UserAlreadyExistsException;
 import ig2i.la2.hackathon.ladydiary.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void createUser(User user){
+    public void createUser(User user) throws UserAlreadyExistsException {
+        if (userRepository.findUserByName(user.getName()).isPresent()){
+            throw new UserAlreadyExistsException(user.getName());
+        }
         userRepository.save(user);
     }
 
