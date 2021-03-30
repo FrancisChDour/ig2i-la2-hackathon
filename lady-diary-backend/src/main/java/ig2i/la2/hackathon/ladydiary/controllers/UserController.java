@@ -50,6 +50,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
+    @Deprecated
     @ApiOperation(value = "Login an user and return a token")
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "user doest not exit"),
@@ -60,6 +61,7 @@ public class UserController {
                 .body(userService.login(name, password).getToken());
     }
 
+    @Deprecated
     @PostMapping("/logout")
     public ResponseEntity<HttpStatus> logout(@RequestHeader String token) throws WrongFormatException {
         userService.logout(token);
