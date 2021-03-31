@@ -28,7 +28,9 @@ public class TopicService {
             throw new WrongFormatException();
         }
 
-        topic.setCreationDate(LocalDateTime.now());
+        if(topic.getCreationDate() == null){
+            topic.setCreationDate(LocalDateTime.now());
+        }
 
         topic.setUser(user);
 
