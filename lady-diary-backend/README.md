@@ -8,6 +8,10 @@ Ce micro service est Dockerisé. Les images des différentes versions sont dispo
 https://hub.docker.com/r/francischdour/ig2i-lady-diary-backend
 
 ## Version
+
+v1.1.1
++ Athentication : Passage des creditentials dans le body
+
 v1.1.0
 + Gestion des doublons d'utilisateur
 + Gestion des mots de passe
