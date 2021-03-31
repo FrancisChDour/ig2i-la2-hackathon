@@ -21,6 +21,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoderService passwordEncoderService;
+
     public User findUserbyId(Integer id) throws RecordNotFoundException {
         return userRepository.findUserById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id.toString()));
@@ -34,6 +36,7 @@ public class UserService {
         if (userRepository.findUserByName(user.getName()).isPresent()){
             throw new UserAlreadyExistsException(user.getName());
         }
+        user.setPassword(passwordEncoderService.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -63,7 +66,7 @@ public class UserService {
         User user = userRepository.findUserByName(name)
                 .orElseThrow(UserNotFoundException::new);
 
-        if (!user.getPassword().equals(password)){
+        if (!passwordEncoderService.compare(password, user.getPassword())){
             throw new UnauthorizedException();
         }
 
