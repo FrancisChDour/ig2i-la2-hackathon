@@ -184,3 +184,118 @@ public class ErrorMessage {
 Personnelement j'aime commencer par implémenter les Controllers pour valider le contrat d'interface avant de s'attaquer aux
 règles métiers des services puis à l'accès aux données des Repositories. Mais on peut très bien faire l'inverse et commencer
 par les repositories > services > Controllers.
+
+### Validations et personalisation des JSON
+
+Dans un contrat d'interface parfait, on n'aimerait pas que quelqu'un tente de nous envoyer un id utilisateur lors de la création de celui-ci,
+ni même ce token. De même c'est dommage de renvoyer le mot de passe en retour d'un GET User. De plus on s'attend à ce que le
+mot de passe fournie fasse par exemple minimun 8 caractères.
+
+Il y a une façon TRES simple de mettre ça en place sans avoir à écrire les règles nous même dans les services. 
+Pour se faire il faut déjà ajouter la dépendances suivante dans le pom :
+
+```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+```
+
+Ensuite on va ajouter un nouvel handler d'exception dans notre `ExceptionHandlerController` afin de personnaliser
+le message de retour et ne pas avoir un simple 400 :
+
+```java
+@ControllerAdvice
+@Log4j2
+public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        List<String> errorList = ex
+                .getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorMessage.builder()
+                .error("badRequest")
+                .message("Your request has a wrong format")
+                .details(errorList)
+                .build());
+    }
+// ...
+}
+```
+
+Puis pour chaque objet du domaine qu'on s'attend à recevoir ou qu'on compte emmettre, on va ajouter des contraintes.
+Soit des contraintes sur les champs avec les annotations de la bibliothèque `jakarta.validation-api` qui fait partie de
+la dépendance que nous venons d'ajouter, soit via les annotations de Jackson, la bibliothèque native de Spring boot
+qui mappe les Json en objet et les objets en Json.
+Par exemple pour `User` :
+
+```java
+@Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    // Ici la propriété sera présente en sortie d'un JSON mais pas en entrée
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer id;
+
+    @Column(name = "name", unique = true)
+    @NotBlank // On définit le nom comme non-null et non-vide
+    @Size(min = 3,max = 32) // Avec un taille comprise entre min et max
+    private String name;
+
+    @Column(name = "password")
+    // A l'inverse de l'id, le password n'est reçu qu'en entrée et n'est jamais retransmis après
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotBlank // Idem que le nom
+    @Size(min = 3,max = 32) // Idem que le nom mais ici entre 8 et 32
+    private String password;
+
+    @Column(name = "token")
+    // Le token n'est pjamais présent dans les JSON
+    @JsonIgnore
+    private String token;
+
+    @Column(name = "token_expiration_date")
+    // De même que le token
+    @JsonIgnore 
+    private LocalDateTime tokenExpirationDate;
+}
+```
+Et pour terminer, on définit le body reçu dans l'appel POST : /v1/users comme devant être valide avec l'annotation `@Valid` :
+```java
+    @PostMapping()
+    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody User user) throws WrongFormatException {
+        userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+```
+Maintenant si on tente de créer un utilisateur avec les informations suivantes :
+```json
+{
+  "name": "",
+  "password": "alo"
+}
+```
+Alors on reçoit une erreur 400 avec les informations suivantes :
+```json
+{
+  "error": "badRequest",
+  "message": "Your request has a wrong format",
+  "details": [
+    "name ne doit pas être vide",
+    "name la taille doit être comprise entre 3 et 32"
+  ]
+}
+```
+Plutôt puissant <3

@@ -1,5 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,11 +40,11 @@ public class User {
     private String password;
 
     @Column(name = "token")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     private String token;
 
     @Column(name = "token_expiration_date")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     private LocalDateTime tokenExpirationDate;
 }
 
