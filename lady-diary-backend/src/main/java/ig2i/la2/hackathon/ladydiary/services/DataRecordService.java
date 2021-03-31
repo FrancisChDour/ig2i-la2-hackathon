@@ -2,7 +2,10 @@ package ig2i.la2.hackathon.ladydiary.services;
 
 import ig2i.la2.hackathon.ladydiary.domain.datarecord.DataRecord;
 import ig2i.la2.hackathon.ladydiary.domain.datarecord.DataRecordNotFoundException;
+import ig2i.la2.hackathon.ladydiary.domain.record.Record;
+import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.repositories.DataRecordRepository;
+import ig2i.la2.hackathon.ladydiary.repositories.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.Optional;
 public class DataRecordService {
 
     private final DataRecordRepository dataRecordRepository;
+    private final RecordRepository recordRepository;
 
     public List<DataRecord> getAll() {
         return dataRecordRepository.findAll();
@@ -23,8 +27,11 @@ public class DataRecordService {
         dataRecordRepository.save(dataRecord);
     }
 
-    public List<DataRecord> findDataRecordsByIdRecord(Integer idRecord) {
-        return dataRecordRepository.findByIdRecord(idRecord);
+    public List<DataRecord> getDataRecordsFromRecord(Integer idRecord) throws RecordNotFoundException {
+        Record record = recordRepository.findById(idRecord).orElseThrow(() ->
+                new RecordNotFoundException(idRecord.toString()));
+
+        return record.getDataRecords();
     }
 
     public void deleteRecord(Integer idDataRecord) throws DataRecordNotFoundException {

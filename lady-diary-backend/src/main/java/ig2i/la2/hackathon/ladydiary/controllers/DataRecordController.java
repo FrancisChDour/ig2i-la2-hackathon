@@ -2,6 +2,7 @@ package ig2i.la2.hackathon.ladydiary.controllers;
 
 import ig2i.la2.hackathon.ladydiary.domain.datarecord.DataRecord;
 import ig2i.la2.hackathon.ladydiary.domain.datarecord.DataRecordNotFoundException;
+import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.DataRecordService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -20,14 +21,14 @@ public class DataRecordController {
 
     private final DataRecordService dataRecordService;
 
-    @ApiOperation(value = "Retrieve all records data with record id")
+    @ApiOperation(value = "Retrieve all data records from a record")
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Bad parameter : id of record is not an integer."),
-            @ApiResponse(code = 204, message = "No data records found"),
-            @ApiResponse(code = 200, message = "")})
-    @GetMapping()
-    public ResponseEntity<List<DataRecord>> getDataRecords(@RequestParam(name = "idRecord") Integer idRecord){
-        List<DataRecord> dataRecords = dataRecordService.findDataRecordsByIdRecord(idRecord);
+            @ApiResponse(code = 400, message = "Bad parameter : no record id given"),
+            @ApiResponse(code = 204, message = "No data found"),
+            @ApiResponse(code = 200, message = "Data records")})
+    @GetMapping("/fetchFromRecord/{idRecord}")
+    public ResponseEntity<List<DataRecord>> getRecordsFromIdTopic(@PathVariable int idRecord) throws RecordNotFoundException {
+        List<DataRecord> dataRecords = dataRecordService.getDataRecordsFromRecord(idRecord);
 
         if (dataRecords.isEmpty()){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
