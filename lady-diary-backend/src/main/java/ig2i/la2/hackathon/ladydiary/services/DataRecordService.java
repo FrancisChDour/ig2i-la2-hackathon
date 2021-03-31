@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class DataRecordService {
     }
 
     public void createDataRecord(DataRecord dataRecord){
+        dataRecordRepository.save(dataRecord);
     }
 
     public List<DataRecord> findDataRecordsByIdRecord(Integer idRecord) {
@@ -26,9 +28,18 @@ public class DataRecordService {
     }
 
     public void deleteRecord(Integer idDataRecord) throws DataRecordNotFoundException {
+        Optional<DataRecord> dataRecord = dataRecordRepository.findById(idDataRecord);
+        if(dataRecord.isEmpty()){
+            throw new DataRecordNotFoundException();
+        }
+        dataRecordRepository.delete(dataRecord.get());
     }
 
-    public void updateRecord(DataRecord dataRecord) throws DataRecordNotFoundException{
+    public void updateDataRecord(DataRecord dataRecord) throws DataRecordNotFoundException {
+        if(dataRecordRepository.findById(dataRecord.getId()).isEmpty()){
+            throw new DataRecordNotFoundException();
+        }
+        dataRecordRepository.save(dataRecord);
     }
 
 }
