@@ -1,7 +1,7 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
-import ig2i.la2.hackathon.ladydiary.domain.user.AuthenticationCreditentials;
+import ig2i.la2.hackathon.ladydiary.domain.user.AuthenticationCredentials;
 import ig2i.la2.hackathon.ladydiary.domain.user.AuthenticationToken;
 import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
@@ -27,8 +27,8 @@ public class AuthenticationController {
             @ApiResponse(code = 404, message = "user doest not exit"),
             @ApiResponse(code = 401, message = "User exits but password is incorrect")})
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationToken> login(@RequestBody AuthenticationCreditentials authenticationCreditentials) throws UnauthorizedException, UserNotFoundException, WrongFormatException {
-        User user = userService.login(authenticationCreditentials.getUserName(), authenticationCreditentials.getPassword());
+    public ResponseEntity<AuthenticationToken> login(@RequestBody AuthenticationCredentials authenticationCredentials) throws UnauthorizedException, UserNotFoundException, WrongFormatException {
+        User user = userService.login(authenticationCredentials.getUserName(), authenticationCredentials.getPassword());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AuthenticationToken.builder()
                         .token(user.getToken())
