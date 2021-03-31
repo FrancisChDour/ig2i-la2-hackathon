@@ -56,7 +56,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "user doest not exit"),
             @ApiResponse(code = 401, message = "User exits but password is incorrect")})
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException, UserNotFoundException {
+    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException, UserNotFoundException, WrongFormatException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.login(name, password).getToken());
     }

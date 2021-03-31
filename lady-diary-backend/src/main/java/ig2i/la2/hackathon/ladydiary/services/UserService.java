@@ -55,7 +55,11 @@ public class UserService {
         return user;
     }
 
-    public User login(String name, String password) throws UnauthorizedException, UserNotFoundException {
+    public User login(String name, String password) throws UnauthorizedException, UserNotFoundException, WrongFormatException {
+
+        Optional.ofNullable(name).orElseThrow(WrongFormatException::new);
+        Optional.ofNullable(password).orElseThrow(WrongFormatException::new);
+
         User user = userRepository.findUserByName(name)
                 .orElseThrow(UserNotFoundException::new);
 
