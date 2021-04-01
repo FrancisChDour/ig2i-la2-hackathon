@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,7 @@ public class DataRecordController {
 
     @DeleteMapping("/{idDataRecord}")
     public ResponseEntity<HttpStatus> deleteRecordById(@PathVariable int idDataRecord) throws DataRecordNotFoundException {
-        dataRecordService.deleteRecord(idDataRecord);
+        dataRecordService.deleteDataRecord(idDataRecord);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -50,8 +51,9 @@ public class DataRecordController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping()
-    public ResponseEntity<HttpStatus> updateDataRecord(@RequestBody DataRecord dataRecord) throws DataRecordNotFoundException{
+    @PutMapping("/{idDataRecord}")
+    public ResponseEntity<HttpStatus> updateDataRecord(@PathVariable Integer idDataRecord, @Valid @RequestBody DataRecord dataRecord) throws DataRecordNotFoundException{
+        dataRecord.setId(idDataRecord);
         dataRecordService.updateDataRecord(dataRecord);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

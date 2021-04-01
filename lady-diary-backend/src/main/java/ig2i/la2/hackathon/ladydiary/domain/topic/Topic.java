@@ -31,7 +31,7 @@ public class Topic {
 
     @Column(name = "creation_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @PastOrPresent
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime creationDate;
 
     @Column(name = "name")

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -49,8 +50,9 @@ public class RecordController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PutMapping()
-    public ResponseEntity<HttpStatus> updateRecord(@RequestBody Record record) throws RecordNotFoundException{
+    @PutMapping("/{idRecord}")
+    public ResponseEntity<HttpStatus> updateRecord(@PathVariable Integer idRecord,@Valid @RequestBody Record record) throws RecordNotFoundException{
+        record.setId(idRecord);
         recordService.updateRecord(record);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

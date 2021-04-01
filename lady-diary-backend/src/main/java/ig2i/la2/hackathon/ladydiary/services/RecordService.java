@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,17 +36,15 @@ public class RecordService {
     }
 
     public void deleteRecord(Integer idRecord) throws RecordNotFoundException{
-        Optional<Record> record = recordRepository.findRecordById(idRecord);
-        if(record.isEmpty()){
-            throw new RecordNotFoundException();
-        }
-        recordRepository.delete(record.get());
+        Record record = recordRepository.findRecordById(idRecord)
+                .orElseThrow(() -> new RecordNotFoundException(idRecord.toString()));
+        recordRepository.delete(record);
     }
 
     public void updateRecord(Record record) throws RecordNotFoundException{
-        if(recordRepository.findRecordById(record.getId()).isEmpty()){
-            throw new RecordNotFoundException();
-        }
+        recordRepository.findById(record.getId())
+                .orElseThrow(() -> new RecordNotFoundException(record.getId().toString()));
+
         recordRepository.save(record);
     }
 

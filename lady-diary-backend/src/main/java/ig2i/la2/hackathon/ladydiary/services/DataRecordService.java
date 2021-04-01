@@ -10,13 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DataRecordService {
 
     private final DataRecordRepository dataRecordRepository;
+
     private final RecordRepository recordRepository;
 
     public List<DataRecord> getAll() {
@@ -34,19 +34,16 @@ public class DataRecordService {
         return record.getDataRecords();
     }
 
-    public void deleteRecord(Integer idDataRecord) throws DataRecordNotFoundException {
-        Optional<DataRecord> dataRecord = dataRecordRepository.findById(idDataRecord);
-        if(dataRecord.isEmpty()){
-            throw new DataRecordNotFoundException();
-        }
-        dataRecordRepository.delete(dataRecord.get());
+    public void deleteDataRecord(Integer idDataRecord) throws DataRecordNotFoundException {
+        DataRecord dataRecord = dataRecordRepository.findById(idDataRecord)
+                .orElseThrow(() -> new DataRecordNotFoundException(idDataRecord.toString()));
+
+        dataRecordRepository.delete(dataRecord);
     }
 
     public void updateDataRecord(DataRecord dataRecord) throws DataRecordNotFoundException {
-        if(dataRecordRepository.findById(dataRecord.getId()).isEmpty()){
-            throw new DataRecordNotFoundException();
-        }
+        dataRecordRepository.findById(dataRecord.getId())
+                .orElseThrow(() -> new DataRecordNotFoundException(dataRecord.getId().toString()));
         dataRecordRepository.save(dataRecord);
     }
-
 }

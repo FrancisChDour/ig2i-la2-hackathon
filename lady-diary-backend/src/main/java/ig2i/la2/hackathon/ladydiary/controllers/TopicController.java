@@ -1,7 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.controllers;
 
 import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
-import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
 import ig2i.la2.hackathon.ladydiary.domain.topic.Topic;
 import ig2i.la2.hackathon.ladydiary.domain.topic.TopicNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.TopicService;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,13 +20,14 @@ public class TopicController {
     private final TopicService topicService;
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> createTopic(@RequestBody Topic topic, @RequestHeader String token) throws WrongFormatException, UnauthorizedException {
+    public ResponseEntity<HttpStatus> createTopic(@RequestBody Topic topic, @RequestHeader String token) throws UnauthorizedException {
         topicService.createTopic(topic, token);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping()
-    public ResponseEntity<HttpStatus> updateTopic(@RequestBody Topic topic) throws TopicNotFoundException {
+    @PutMapping("/{idTopic}")
+    public ResponseEntity<HttpStatus> updateTopic(@PathVariable Integer idTopic, @Valid @RequestBody Topic topic) throws TopicNotFoundException {
+        topic.setId(idTopic);
         topicService.updateTopic(topic);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
