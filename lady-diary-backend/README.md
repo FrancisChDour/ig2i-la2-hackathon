@@ -8,6 +8,11 @@ Ce micro service est Dockerisé. Les images des différentes versions sont dispo
 https://hub.docker.com/r/francischdour/ig2i-lady-diary-backend
 
 ## Version
+v1.2.O
++ Controles sur les JSON entrants et sortants
++ Méthode PUT retravaillées
++ Refacto services
++ Ajout de données de test au lancement de l'application sous H2
 
 v1.1.1
 + Athentication : Passage des creditentials dans le body
