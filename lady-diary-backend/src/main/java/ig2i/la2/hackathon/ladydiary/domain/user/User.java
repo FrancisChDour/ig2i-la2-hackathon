@@ -36,7 +36,7 @@ public class User {
     @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank
-    @Size(min = 3,max = 32)
+    @Size(min = 8)
     private String password;
 
     @Column(name = "token")

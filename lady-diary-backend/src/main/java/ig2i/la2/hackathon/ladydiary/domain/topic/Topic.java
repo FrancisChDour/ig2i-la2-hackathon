@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,7 +40,6 @@ public class Topic {
 
     @ManyToOne
     @JoinColumn(name = "id_owner")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private User user;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,12 +39,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Integer id) throws RecordNotFoundException {
-        Optional<User> user = userRepository.findUserById(id);
-        if(user.isEmpty()){
-            throw new RecordNotFoundException();
-        }
-        userRepository.delete(user.get());
+    public void deleteUser(Integer id) throws UserNotFoundException {
+        User user = userRepository.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException(id.toString()));
+        userRepository.delete(user);
     }
 
     public User authenticate(String token) throws UnauthorizedException {

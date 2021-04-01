@@ -43,6 +43,7 @@ public class Record {
     private Integer idTopic;
 
     @OneToMany(mappedBy = "idRecord")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<DataRecord> dataRecords;
 
 }

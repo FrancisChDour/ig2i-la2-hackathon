@@ -2,7 +2,6 @@ package ig2i.la2.hackathon.ladydiary.controllers;
 
 import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
-import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import ig2i.la2.hackathon.ladydiary.domain.user.UserNotFoundException;
 import ig2i.la2.hackathon.ladydiary.services.UserService;
@@ -45,8 +44,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @ApiOperation(value = "Delete a user from his ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "User doest not exit"),
+            @ApiResponse(code = 202, message = "User successfully deleted")})
     @DeleteMapping("/{idUser}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer idUser) throws RecordNotFoundException {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer idUser) throws UserNotFoundException {
         userService.deleteUser(idUser);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
@@ -57,7 +60,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "user doest not exit"),
             @ApiResponse(code = 401, message = "User exits but password is incorrect")})
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException, UserNotFoundException, WrongFormatException {
+    public ResponseEntity<String> login(@RequestParam String name, @RequestParam String password) throws UnauthorizedException, UserNotFoundException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.login(name, password).getToken());
     }

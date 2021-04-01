@@ -25,7 +25,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
                 .getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(fieldError -> String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage()))
+                .map(fieldError -> String.format("%s : %s", fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorMessage.builder()
