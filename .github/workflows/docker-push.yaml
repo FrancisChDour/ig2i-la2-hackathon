@@ -27,4 +27,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: francischdour/ig2i-lady-diary-backend
           tag_with_ref: true
-          working-directory: ./lady-diary-backend
+          dockerfile: ./lady-diary-backend/Dockerfile
