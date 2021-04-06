@@ -84,7 +84,7 @@ public class UserService {
     public void updateUser(User user) throws UserNotFoundException {
         userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(user.getId().toString()));
-
+        user.setPassword(passwordEncoderService.encode(user.getPassword()));
         userRepository.save(user);
     }
 }
