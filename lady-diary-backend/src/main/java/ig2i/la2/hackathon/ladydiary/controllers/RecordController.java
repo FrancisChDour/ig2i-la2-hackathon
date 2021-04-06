@@ -38,18 +38,31 @@ public class RecordController {
         }
     }
 
+    @ApiOperation(value = "Create a record")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Something is wrong with your request"),
+            @ApiResponse(code = 201, message = "record successfully created")})
     @PostMapping()
     public ResponseEntity<HttpStatus> createRecord(@RequestBody Record record) {
         recordService.createRecord(record);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @ApiOperation(value = "Delete a record from his ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Record does not exit"),
+            @ApiResponse(code = 200, message = "Record successfully deleted")})
     @DeleteMapping("/{idRecord}")
     public ResponseEntity<HttpStatus> deleteRecordById(@PathVariable int idRecord) throws RecordNotFoundException {
         recordService.deleteRecord(idRecord);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @ApiOperation(value = "Update a record from his ID. Non provided fields will override existing values to null")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Record does not exit"),
+            @ApiResponse(code = 400, message = "Something is wrong with your request"),
+            @ApiResponse(code = 200, message = "Record successfully updated")})
     @PutMapping("/{idRecord}")
     public ResponseEntity<HttpStatus> updateRecord(@PathVariable Integer idRecord,@Valid @RequestBody Record record) throws RecordNotFoundException{
         record.setId(idRecord);
@@ -57,6 +70,10 @@ public class RecordController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @ApiOperation(value = "Retrieve a record")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "This record does not exist"),
+            @ApiResponse(code = 200, message = "The retrieved record")})
     @GetMapping("/{idRecord}")
     public ResponseEntity<Record> getRecordById(@PathVariable int idRecord) throws RecordNotFoundException{
         Record record = recordService.findRecordById(idRecord);
@@ -67,6 +84,7 @@ public class RecordController {
     @ApiOperation(value = "Retrieve all records from a topic")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No records found"),
+            @ApiResponse(code = 404, message = "The provided topic doest not exist"),
             @ApiResponse(code = 200, message = "Records")})
     @GetMapping("/fetchFromTopic/{idTopic}")
     public ResponseEntity<List<Record>> getRecordsFromIdTopic(@PathVariable int idTopic) throws TopicNotFoundException {

@@ -39,18 +39,31 @@ public class DataRecordController {
         }
     }
 
+    @ApiOperation(value = "Delete a data record from his ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Data Record does not exit"),
+            @ApiResponse(code = 200, message = "Data Record successfully deleted")})
     @DeleteMapping("/{idDataRecord}")
     public ResponseEntity<HttpStatus> deleteRecordById(@PathVariable int idDataRecord) throws DataRecordNotFoundException {
         dataRecordService.deleteDataRecord(idDataRecord);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @ApiOperation(value = "Create a data record")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Something is wrong with your request"),
+            @ApiResponse(code = 201, message = "Data record successfully created")})
     @PostMapping()
     public ResponseEntity<HttpStatus> createDataRecord(@RequestBody DataRecord dataRecord) {
         dataRecordService.createDataRecord(dataRecord);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @ApiOperation(value = "Update a data record from his ID. Non provided fields will override existing values to null")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Data Record does not exit"),
+            @ApiResponse(code = 400, message = "Something is wrong with your request"),
+            @ApiResponse(code = 200, message = "Data Record successfully updated")})
     @PutMapping("/{idDataRecord}")
     public ResponseEntity<HttpStatus> updateDataRecord(@PathVariable Integer idDataRecord, @Valid @RequestBody DataRecord dataRecord) throws DataRecordNotFoundException{
         dataRecord.setId(idDataRecord);

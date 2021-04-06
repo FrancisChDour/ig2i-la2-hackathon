@@ -2,7 +2,6 @@ package ig2i.la2.hackathon.ladydiary.services;
 
 import ig2i.la2.hackathon.ladydiary.domain.erros.UnauthorizedException;
 import ig2i.la2.hackathon.ladydiary.domain.erros.WrongFormatException;
-import ig2i.la2.hackathon.ladydiary.domain.record.RecordNotFoundException;
 import ig2i.la2.hackathon.ladydiary.domain.user.User;
 import ig2i.la2.hackathon.ladydiary.domain.user.UserAlreadyExistsException;
 import ig2i.la2.hackathon.ladydiary.domain.user.UserNotFoundException;
@@ -22,21 +21,21 @@ public class UserService {
 
     private final PasswordEncoderService passwordEncoderService;
 
-    public User findUserbyId(Integer id) throws RecordNotFoundException {
+    public User findUserbyId(Integer id) throws UserNotFoundException {
         return userRepository.findUserById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id.toString()));
+                .orElseThrow(() -> new UserNotFoundException(id.toString()));
     }
 
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    public void createUser(User user) throws UserAlreadyExistsException {
-        if (userRepository.findUserByName(user.getName()).isPresent()){
+    public User createUser(User user) throws UserAlreadyExistsException {
+        if (userRepository.findUserByName(user.getName()).isPresent()) {
             throw new UserAlreadyExistsException(user.getName());
         }
         user.setPassword(passwordEncoderService.encode(user.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public void deleteUser(Integer id) throws UserNotFoundException {
@@ -49,7 +48,7 @@ public class UserService {
         User user = userRepository.findUserByToken(token)
                 .orElseThrow(UnauthorizedException::new);
 
-        if (user.getTokenExpirationDate().isBefore(LocalDateTime.now())){
+        if (user.getTokenExpirationDate().isBefore(LocalDateTime.now())) {
             throw new UnauthorizedException();
         }
         return user;
@@ -60,7 +59,7 @@ public class UserService {
         User user = userRepository.findUserByName(name)
                 .orElseThrow(UserNotFoundException::new);
 
-        if (!passwordEncoderService.compare(password, user.getPassword())){
+        if (!passwordEncoderService.compare(password, user.getPassword())) {
             throw new UnauthorizedException();
         }
 
@@ -79,6 +78,13 @@ public class UserService {
         user.setToken(null);
         user.setTokenExpirationDate(null);
 
+        userRepository.save(user);
+    }
+
+    public void updateUser(User user) throws UserNotFoundException {
+        userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException(user.getId().toString()));
+        user.setPassword(passwordEncoderService.encode(user.getPassword()));
         userRepository.save(user);
     }
 }

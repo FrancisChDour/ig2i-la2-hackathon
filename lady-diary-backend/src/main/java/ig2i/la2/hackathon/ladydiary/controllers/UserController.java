@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,10 +23,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    @ApiOperation(value = "Retrieve all records")
+
+    @ApiOperation(value = "Retrieve all topics")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "No records found"),
-            @ApiResponse(code = 200, message = "Re records")})
+            @ApiResponse(code = 204, message = "No user found"),
+            @ApiResponse(code = 200, message = "The list of existing users")})
     @GetMapping()
     public ResponseEntity<List<User>> getUsers(){
         List<User> users = userService.getAll();
@@ -38,20 +40,46 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Retrieve an user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "This user does not exist"),
+            @ApiResponse(code = 200, message = "The retrieved user")})
+    @GetMapping("/{idUser}")
+    public ResponseEntity<User> findTopicById(@PathVariable Integer idUser) throws UserNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUserbyId(idUser));
+    }
+
+    @ApiOperation(value = "Create an user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Something is wrong with your request"),
+            @ApiResponse(code = 200, message = "User successfully updated")})
     @PostMapping()
-    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody User user) throws WrongFormatException {
-        userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody User user, HttpServletRequest request) throws WrongFormatException {
+        User userCreated = userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Location", String.format("%s/%d", request.getRequestURL(), userCreated.getId())).build();
+    }
+
+    @ApiOperation(value = "Update an user from his ID. Non provided fields will override existing values to null")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "User does not exit"),
+            @ApiResponse(code = 400, message = "Something is wrong with your request"),
+            @ApiResponse(code = 200, message = "User successfully updated")})
+    @PutMapping("/{idUser}")
+    public ResponseEntity<HttpStatus> putUser(@PathVariable Integer idUser, @Valid @RequestBody User user) throws UserNotFoundException {
+        user.setId(idUser);
+        userService.updateUser(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @ApiOperation(value = "Delete a user from his ID")
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "User doest not exit"),
-            @ApiResponse(code = 202, message = "User successfully deleted")})
+            @ApiResponse(code = 200, message = "User successfully deleted")})
     @DeleteMapping("/{idUser}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer idUser) throws UserNotFoundException {
         userService.deleteUser(idUser);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Deprecated
