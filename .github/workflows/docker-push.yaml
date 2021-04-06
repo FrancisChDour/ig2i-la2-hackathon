@@ -16,7 +16,7 @@ jobs:
         working-directory: ./lady-diary-backend
         run: mvn clean install --file pom.xml
       - name: Push to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v1
         with:
           context: ./lady-diary-backend
           file: ./lady-diary-backend/Dockerfile
