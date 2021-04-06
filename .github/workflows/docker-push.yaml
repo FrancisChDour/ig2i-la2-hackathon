@@ -20,7 +20,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install --file pom.xml
       - name: test
-        run: ls ./ig2i-lady-diary-backend/target
+        run: ls target
       - name: Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
@@ -28,6 +28,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: francischdour/ig2i-lady-diary-backend
           tag_with_ref: true
-          dockerfile: ./lady-diary-backend/Dockerfile
+          dockerfile: Dockerfile
       - name: test
-        run: ls ./ig2i-lady-diary-backend/target
+        run: ls target
