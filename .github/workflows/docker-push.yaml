@@ -18,8 +18,8 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
-          context: ./lady-diary-backend
-          file: ./lady-diary-backend/Dockerfile
+          path: ./lady-diary-backend
+          dockerfile: ./lady-diary-backend/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: francischdour/ig2i-lady-diary-backend
