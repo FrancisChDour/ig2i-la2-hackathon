@@ -30,7 +30,7 @@ public class AuthenticationController {
             @ApiResponse(code = 404, message = "user doest not exit"),
             @ApiResponse(code = 401, message = "User exits but password is incorrect")})
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationToken> login(@Valid @RequestBody AuthenticationCredentials authenticationCredentials) throws UnauthorizedException, UserNotFoundException, WrongFormatException {
+    public ResponseEntity<AuthenticationToken> login(@Valid @RequestBody AuthenticationCredentials authenticationCredentials) throws UnauthorizedException, UserNotFoundException {
         User user = userService.login(authenticationCredentials.getUsername(), authenticationCredentials.getPassword());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AuthenticationToken.builder()
@@ -39,6 +39,10 @@ public class AuthenticationController {
                         .build());
     }
 
+    @ApiOperation(value = "Logout an user from his token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Somethings is wrong with your request"),
+            @ApiResponse(code = 200, message = "user successfully logout")})
     @PostMapping("/logout")
     public ResponseEntity<HttpStatus> logout(@RequestHeader String token) throws WrongFormatException {
         userService.logout(token);
