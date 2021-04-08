@@ -1,6 +1,5 @@
 package ig2i.la2.hackathon.ladydiary.domain.datarecord;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +31,5 @@ public class DataRecord {
     private String value;
 
     @Column(name = "id_record")
-    @JsonIgnore
     private Integer idRecord;
 }

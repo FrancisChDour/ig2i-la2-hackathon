@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationToken {
+    private Integer idUser;
     private String token;
     private LocalDateTime expirationDate;
 }

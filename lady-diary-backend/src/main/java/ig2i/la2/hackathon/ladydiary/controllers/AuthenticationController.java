@@ -34,6 +34,7 @@ public class AuthenticationController {
         User user = userService.login(authenticationCredentials.getUsername(), authenticationCredentials.getPassword());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(AuthenticationToken.builder()
+                        .idUser(user.getId())
                         .token(user.getToken())
                         .expirationDate(user.getTokenExpirationDate())
                         .build());

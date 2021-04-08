@@ -8,7 +8,11 @@ Ce micro service est Dockerisé. Les images des différentes versions sont dispo
 https://hub.docker.com/r/francischdour/ig2i-lady-diary-backend
 
 ## Version
-V1.3.0
+v1.3.1
++ Record & Data Records : Ajout de l'ID de l'entité parente dans le JSON
++ Login : Ajout de l'ID utilisateur
+
+v1.3.0
 + Refacto et documentation des controllers
 + Refacto des JSON entrants
 + Github CI

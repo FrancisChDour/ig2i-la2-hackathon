@@ -1,7 +1,6 @@
 package ig2i.la2.hackathon.ladydiary.domain.record;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ig2i.la2.hackathon.ladydiary.domain.datarecord.DataRecord;
@@ -43,7 +42,6 @@ public class Record {
     private LocalDateTime recordDate;
 
     @Column(name = "id_topic")
-    @JsonIgnore
     private Integer idTopic;
 
     @OneToMany(mappedBy = "idRecord")
